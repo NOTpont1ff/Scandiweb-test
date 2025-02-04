@@ -1,0 +1,74 @@
+
+@import '@fontsource/press-start-2p';
+
+  .table button {
+    width: auto; 
+    padding: 4px 8px;
+    padding-top: 5px; 
+    font-size: 12px;
+    vertical-align: middle !important;
+    text-align: center;
+  }
+  td {
+    vertical-align: middle !important;
+    text-align: center;
+  }
+
+  
+  h1 {
+    padding: 2%;  }
+  #FilterID {
+    padding: 5%;
+  }
+  table{
+    align-content: middle !important;
+  justify-content: center;  /* Horizontally center */
+  align-items: center;      /* Vertically center */
+  }
+
+  h2 {
+    padding: 2%;
+  }
+  #ImageGrid{
+    object-fit: cover; 
+  }
+  #GridDiv{
+    padding: 5%;
+    height: 320px;
+  }
+  #ImageDiv{
+    height: 100px;
+  }
+
+  .image-item {
+    width: 100%;
+    height: 200px; 
+    overflow: hidden; 
+    position: relative; 
+    
+  }
+  
+  .image-item img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+    object-position: center;
+    padding: 2%; 
+  }
+  #Title{
+    height:50px;
+    padding: 2%;
+  }
+  #Balls{
+    padding: 2%;
+  }
+#FormDiv{
+  padding: 2%;
+}
+.center-table {
+  width: 80%;            /* Or whatever width you want */
+  margin: 0 auto;        /* Horizontally center */
+}
+section{
+  padding:0.3%;
+}
