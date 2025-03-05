@@ -36,8 +36,7 @@ const FilmForm: React.FC<Props> = ({ onFilmAdded }) => {
 
   return (
     <>
-      <p></p>
-      <section className="showcase">
+      <section className="showcase padding">
         <section className="nes-container with-title">
           <h3 className="title">Form</h3>
           <form onSubmit={handleSubmit}>

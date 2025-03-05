@@ -34,8 +34,7 @@ const FilmList = () => {
 
   return (
     <>
-      <p></p>
-      <section className="showcase">
+      <section className="showcase padding">
         <section className="nes-container with-title ">
           <h2 className="title">List</h2>
 
@@ -78,7 +77,7 @@ const FilmList = () => {
                   <td>
                     <button
                       onClick={() => handleDelete(filmData.ID)}
-                      className="btn btn-danger btn-sm"
+                      className="nes-btn is-error btn-sm"
                     >
                       x
                     </button>

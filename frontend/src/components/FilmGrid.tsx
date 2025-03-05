@@ -33,8 +33,7 @@ const FilmGrid = () => {
 
   return (
     <>
-      <p></p>
-      <section className="showcase">
+      <section className="showcase padding">
         <section className="nes-container with-title">
           <h2 className="title ">Grid</h2>
           <div id="FilterID " className="container text-center">
@@ -72,12 +71,10 @@ const FilmGrid = () => {
                       </div>
                       <p className="card-text">{filmData.category}</p>
                       <p className="card-text">{filmData.price}.00 $</p>
-                      <button
-                        onClick={() => handleDelete(filmData.ID)}
-                        className="nes-btn is-error "
-                      >
-                        x
-                      </button>
+                      <label>
+                        <input type="checkbox" className="nes-checkbox" />
+                        <span>Delete</span>
+                      </label>
                     </div>
                   </div>
                 </div>

@@ -9,6 +9,8 @@ const NavBar: React.FC = () => {
     setActiveButton(location.pathname);
   }, [location.pathname]);
 
+  function handleDelete() {}
+
   return (
     <section className="showcase">
       <nav className="nes-container is-dark">
@@ -54,6 +56,12 @@ const NavBar: React.FC = () => {
                     Grid
                   </button>
                 </Link>
+                <button
+                  onClick={() => handleDelete()}
+                  className="nes-btn is-error delete-button"
+                >
+                  Mass delete
+                </button>
               </form>
             </div>
             <div className="col d-flex justify-content-end">
