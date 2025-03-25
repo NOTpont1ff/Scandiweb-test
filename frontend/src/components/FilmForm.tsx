@@ -62,7 +62,7 @@ const FilmForm: React.FC<Props> = ({ onFilmAdded }) => {
               </select>
             </div>
             <p></p>
-            <button type="submit" className="btn btn-primary mt-2">
+            <button type="submit" className="nes-btn is-primary">
               Submit
             </button>
           </form>

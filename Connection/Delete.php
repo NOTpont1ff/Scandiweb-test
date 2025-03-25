@@ -14,6 +14,7 @@ $username = "root";
 $password = "";
 $dbname = "filmstoredb";
 
+// ✅ Secure Database Connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -21,22 +22,37 @@ if ($conn->connect_error) {
     exit();
 }
 
+// ✅ Read JSON Data
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data["ID"])) {
-    echo json_encode(["success" => false, "message" => "Invalid input"]);
+if (!is_array($data)) {
+    echo json_encode(["success" => false, "message" => "Invalid data format"]);
     exit();
 }
 
-$filmID = $conn->real_escape_string($data["ID"]);
+// ✅ Prepare SQL Query to Prevent SQL Injection
+$stmt = $conn->prepare("DELETE FROM filmlisttb WHERE ID = ?");
+$stmt->bind_param("i", $filmId); // "i" means integer
 
-$sql = "DELETE FROM filmlisttb WHERE ID = '$filmID'";
+$deletedFilms = [];
+$errors = [];
 
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(["success" => true, "message" => "Film deleted successfully"]);
-} else {
-    echo json_encode(["success" => false, "message" => "Error deleting film: " . $conn->error]);
+// ✅ Loop through each ID and delete securely
+foreach ($data as $filmId) {
+    if ($stmt->execute()) {
+        $deletedFilms[] = $filmId;
+    } else {
+        $errors[] = ["id" => $filmId, "error" => $stmt->error];
+    }
 }
 
+// ✅ Response JSON
+if (count($errors) === 0) {
+    echo json_encode(["success" => true, "message" => "Films deleted successfully", "deleted" => $deletedFilms]);
+} else {
+    echo json_encode(["success" => false, "message" => "Some films could not be deleted", "errors" => $errors]);
+}
+
+$stmt->close();
 $conn->close();
 ?>

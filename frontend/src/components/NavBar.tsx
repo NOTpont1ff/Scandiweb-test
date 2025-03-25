@@ -1,15 +1,26 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { DeleteContext } from "./Context/MassDeleteContext";
 
 const NavBar: React.FC = () => {
   const location = useLocation();
   const [activeButton, setActiveButton] = useState<string>(location.pathname);
 
+  const context = useContext(DeleteContext);
+  if (!context) {
+    throw new Error("DeleteContext must be used within a MassDeleteProvider");
+  }
+
+  const { toggle } = context;
+
   useEffect(() => {
     setActiveButton(location.pathname);
   }, [location.pathname]);
 
-  function handleDelete() {}
+  function toggleDelete() {
+    window.location.reload();
+    toggle();
+  }
 
   return (
     <section className="showcase">
@@ -24,7 +35,7 @@ const NavBar: React.FC = () => {
                     id="NavButton"
                     className={`nes-btn is-primary ${
                       activeButton === "/"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"
@@ -36,7 +47,7 @@ const NavBar: React.FC = () => {
                   <button
                     className={`nes-btn is-primary ${
                       activeButton === "/FilmForm"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"
@@ -48,7 +59,7 @@ const NavBar: React.FC = () => {
                   <button
                     className={`nes-btn is-primary ${
                       activeButton === "/FilmGrid"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"
@@ -56,8 +67,9 @@ const NavBar: React.FC = () => {
                     Grid
                   </button>
                 </Link>
+
                 <button
-                  onClick={() => handleDelete()}
+                  onClick={toggleDelete}
                   className="nes-btn is-error delete-button"
                 >
                   Mass delete
@@ -68,7 +80,8 @@ const NavBar: React.FC = () => {
               <img
                 src="https://media.tenor.com/C1_KkudKHM8AAAAj/mario-dance.gif"
                 height={150}
-              ></img>
+                alt="Mario Dancing"
+              />
             </div>
           </div>
         </div>

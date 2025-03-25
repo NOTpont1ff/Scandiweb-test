@@ -1,11 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FilmData } from "../types/Film";
-import { deleteFilm, fetchFilms } from "../services/filmService";
+import { fetchFilms } from "../services/filmService";
+import { DeleteContext } from "./Context/MassDeleteContext";
 
 const FilmGrid = () => {
   const [film, setFilm] = useState<FilmData[]>([]);
   const [filteredFilms, setFilteredFilms] = useState<FilmData[]>([]);
   const filterCategoryRef = useRef<HTMLSelectElement>(null);
+
+  const context = useContext(DeleteContext);
+
+  if (!context) {
+    throw new Error("DeleteContext must be used within a MassDeleteProvider");
+  }
+
+  const { setSelectedItems } = context;
 
   useEffect(() => {
     loadFilms();
@@ -17,11 +26,6 @@ const FilmGrid = () => {
     setFilteredFilms(data);
   };
 
-  const handleDelete = async (filmID: number) => {
-    await deleteFilm(filmID);
-    loadFilms();
-  };
-
   const handleFilter = () => {
     const category = filterCategoryRef.current?.value;
     if (category === "All" || !category) {
@@ -30,6 +34,25 @@ const FilmGrid = () => {
       setFilteredFilms(film.filter((f) => f.category === category));
     }
   };
+
+  const toggleSelection = (filmId: number) => {
+    setSelectedItems((prevSelected: number[]) =>
+      prevSelected.includes(filmId)
+        ? prevSelected.filter((id) => id !== filmId)
+        : [...prevSelected, filmId]
+    );
+  };
+  if (filteredFilms.length === 0) {
+    console.log("State is empty");
+    return (
+      <section className="showcase padding">
+        <section className="nes-container with-title">
+          <p className="text-center">No data records ;(</p>
+          <i className="nes-squirtle text-center"></i>
+        </section>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -65,14 +88,17 @@ const FilmGrid = () => {
                   <div className="nes-container with-title is-centered">
                     <p className="title">{filmData.name}</p>
                     <div className="card-body" id="GridDiv">
-                      {" "}
                       <div className="image-item">
                         <img src={filmData.URL} alt="Film" />
                       </div>
                       <p className="card-text">{filmData.category}</p>
                       <p className="card-text">{filmData.price}.00 $</p>
                       <label>
-                        <input type="checkbox" className="nes-checkbox" />
+                        <input
+                          type="checkbox"
+                          className="nes-checkbox"
+                          onChange={() => toggleSelection(filmData.ID)}
+                        />
                         <span>Delete</span>
                       </label>
                     </div>
