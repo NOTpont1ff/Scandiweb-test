@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { FilmData } from "../types/Film";
-import { deleteFilm, fetchFilms } from "../services/filmService";
-
+import { fetchFilms } from "../services/filmService";
+import { useFilmStore } from "../store";
 const FilmGrid = () => {
   const [film, setFilm] = useState<FilmData[]>([]);
   const [filteredFilms, setFilteredFilms] = useState<FilmData[]>([]);
   const filterCategoryRef = useRef<HTMLSelectElement>(null);
+  const toggleSelection = useFilmStore((state) => state.toggleSelection);
+  const selectedItems = useFilmStore((state) => state.selectedItems);
 
   useEffect(() => {
     loadFilms();
@@ -17,11 +19,6 @@ const FilmGrid = () => {
     setFilteredFilms(data);
   };
 
-  const handleDelete = async (filmID: number) => {
-    await deleteFilm(filmID);
-    loadFilms();
-  };
-
   const handleFilter = () => {
     const category = filterCategoryRef.current?.value;
     if (category === "All" || !category) {
@@ -30,6 +27,18 @@ const FilmGrid = () => {
       setFilteredFilms(film.filter((f) => f.category === category));
     }
   };
+
+  if (filteredFilms.length === 0) {
+    console.log("State is empty");
+    return (
+      <section className="showcase padding">
+        <section className="nes-container with-title">
+          <p className="text-center">No data records ;(</p>
+          <i className="nes-squirtle text-center"></i>
+        </section>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -72,7 +81,11 @@ const FilmGrid = () => {
                       <p className="card-text">{filmData.category}</p>
                       <p className="card-text">{filmData.price}.00 $</p>
                       <label>
-                        <input type="checkbox" className="nes-checkbox" />
+                        <input
+                          type="checkbox"
+                          className="nes-checkbox"
+                          onChange={() => toggleSelection(filmData.ID)}
+                        />
                         <span>Delete</span>
                       </label>
                     </div>

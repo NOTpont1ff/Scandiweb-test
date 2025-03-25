@@ -23,20 +23,31 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data["ID"])) {
-    echo json_encode(["success" => false, "message" => "Invalid input"]);
+if (!is_array($data)) {
+    echo json_encode(["success" => false, "message" => "Invalid data format"]);
     exit();
 }
 
-$filmID = $conn->real_escape_string($data["ID"]);
+$stmt = $conn->prepare("DELETE FROM filmlisttb WHERE ID = ?");
+$stmt->bind_param("i", $filmId);
 
-$sql = "DELETE FROM filmlisttb WHERE ID = '$filmID'";
+$deletedFilms = [];
+$errors = [];
 
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(["success" => true, "message" => "Film deleted successfully"]);
-} else {
-    echo json_encode(["success" => false, "message" => "Error deleting film: " . $conn->error]);
+foreach ($data as $filmId) {
+    if ($stmt->execute()) {
+        $deletedFilms[] = $filmId;
+    } else {
+        $errors[] = ["id" => $filmId, "error" => $stmt->error];
+    }
 }
 
+if (count($errors) === 0) {
+    echo json_encode(["success" => true, "message" => "Films deleted successfully", "deleted" => $deletedFilms]);
+} else {
+    echo json_encode(["success" => false, "message" => "Some films could not be deleted", "errors" => $errors]);
+}
+
+$stmt->close();
 $conn->close();
 ?>

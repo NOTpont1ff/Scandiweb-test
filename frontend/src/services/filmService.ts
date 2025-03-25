@@ -19,11 +19,11 @@ export const submitFilm = async (formData: { name: string; price: string; catego
 };
 
 
-export const deleteFilm = async (filmID: number) => {
+export const deleteFilm = async (numbers: number[]) => {
   await fetch(`${API_BASE}/Delete.php`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ID: filmID }),
+    body: JSON.stringify(numbers),
   });
   return fetchFilms(); 
 };

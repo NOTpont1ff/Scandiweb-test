@@ -1,5 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useFilmStore } from "../store";
+
+const toggleDelete = useFilmStore((state) => state.toggleDelete);
 
 const NavBar: React.FC = () => {
   const location = useLocation();
@@ -9,7 +12,9 @@ const NavBar: React.FC = () => {
     setActiveButton(location.pathname);
   }, [location.pathname]);
 
-  function handleDelete() {}
+  function handleDelete() {
+    toggleDelete();
+  }
 
   return (
     <section className="showcase">
@@ -24,7 +29,7 @@ const NavBar: React.FC = () => {
                     id="NavButton"
                     className={`nes-btn is-primary ${
                       activeButton === "/"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"
@@ -36,7 +41,7 @@ const NavBar: React.FC = () => {
                   <button
                     className={`nes-btn is-primary ${
                       activeButton === "/FilmForm"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"
@@ -48,7 +53,7 @@ const NavBar: React.FC = () => {
                   <button
                     className={`nes-btn is-primary ${
                       activeButton === "/FilmGrid"
-                        ? "btn-success"
+                        ? "nes-btn is-disabled"
                         : "btn-outline-success"
                     }`}
                     type="button"

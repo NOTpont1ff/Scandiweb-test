@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FilmData } from "../types/Film";
-import { fetchFilms, deleteFilm } from "../services/filmService";
+import { fetchFilms } from "../services/filmService";
 import "../App.css";
 
 const FilmList = () => {
@@ -16,11 +16,6 @@ const FilmList = () => {
     const data = await fetchFilms();
     setFilm(data);
     setFilteredFilms(data);
-  };
-
-  const handleDelete = async (filmID: number) => {
-    await deleteFilm(filmID);
-    loadFilms();
   };
 
   const handleFilter = () => {
@@ -75,12 +70,12 @@ const FilmList = () => {
                   <td>{filmData.price}</td>
                   <td>{filmData.category}</td>
                   <td>
-                    <button
+                    {/* <button
                       onClick={() => handleDelete(filmData.ID)}
                       className="nes-btn is-error btn-sm"
                     >
                       x
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
